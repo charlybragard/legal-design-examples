@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Testachats – Problème de livraison</title>
+<style>
+  :root {
+    --ta-magenta: #E6007E;
+    --ta-magenta-dark: #C2005F;
+    --ta-orange: #FF6B35;
+    --ta-orange-light: #FFE8DC;
+    --ta-magenta-light: #FCE4F0;
+    --ta-dark: #1A1A1A;
+    --ta-text: #2C2C2C;
+    --ta-grey: #6B6B6B;
+    --ta-grey-light: #F5F5F5;
+    --ta-border: #E5E5E5;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Sans Pro', 'Segoe UI', Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--ta-text);
+    background: #f0f0f0;
+  }
+
+  .wrapper {
+    max-width: 720px;
+    margin: 0 auto;
+    background: #ffffff;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: #ffffff;
+    padding: 20px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--ta-border);
+  }
+
+  .logo-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-icon { width: 48px; height: 48px; flex-shrink: 0; }
+  .logo-top { width: 48px; height: 24px; background: var(--ta-orange); border-radius: 48px 48px 0 0; }
+  .logo-bottom { width: 48px; height: 24px; background: var(--ta-magenta); border-radius: 0 0 48px 48px; }
+
+  .logo-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ta-dark);
+    letter-spacing: -0.2px;
+  }
+  .logo-name span { color: var(--ta-grey); font-weight: 400; }
+
+  .header-service {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--ta-grey);
+    text-align: right;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── BARRE DOSSIER ── */
+  .dossier-bar {
+    background: var(--ta-grey-light);
+    padding: 10px 28px;
+    display: flex;
+    gap: 32px;
+    border-bottom: 1px solid var(--ta-border);
+  }
+
+  .dossier-field { font-size: 11px; color: var(--ta-grey); }
+  .dossier-field strong { display: block; font-size: 12px; color: var(--ta-text); font-weight: 600; }
+
+  /* ── MAIN CONTENT ── */
+  .content { padding: 28px 28px 0; }
+
+  .greeting { font-size: 20px; font-weight: 700; color: var(--ta-dark); margin-bottom: 6px; }
+  .intro { font-size: 14px; color: var(--ta-grey); margin-bottom: 22px; }
+
+  /* ── BANDEAU N1 ── */
+  .bandeau-n1 {
+    background: linear-gradient(135deg, #E6007E, #C2005F);
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin-bottom: 28px;
+    box-shadow: 0 4px 18px rgba(230,0,126,0.18);
+  }
+
+  .bandeau-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.75);
+    margin-bottom: 10px;
+  }
+
+  .bandeau-text { font-size: 14px; color: #ffffff; line-height: 1.6; }
+
+  .kw {
+    background: rgba(255,255,255,0.22);
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /* ── SECTION TITLES ── */
+  .section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ta-dark);
+    border-bottom: 2px solid var(--ta-magenta);
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    background: var(--ta-magenta);
+    color: #fff;
+    border-radius: 50%;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .section { margin-bottom: 28px; }
+
+  /* ── TABLEAU DROITS ── */
+  .rights-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+
+  .rights-table th {
+    background: var(--ta-dark);
+    color: #ffffff;
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+
+  .rights-table td {
+    padding: 10px 14px;
+    vertical-align: top;
+    border-bottom: 1px solid var(--ta-border);
+  }
+
+  .rights-table tr:nth-child(even) td { background: var(--ta-grey-light); }
+  .rights-table td.accent { color: var(--ta-magenta-dark); font-weight: 600; }
+
+  /* ── INFO-BOX & ALERT-BOX ── */
+  .info-box {
+    background: var(--ta-magenta-light);
+    border-left: 3px solid var(--ta-magenta);
+    border-radius: 0 6px 6px 0;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+  }
+
+  .info-box-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--ta-magenta);
+    margin-bottom: 6px;
+  }
+
+  .alert-box {
+    background: var(--ta-orange-light);
+    border-left: 3px solid var(--ta-orange);
+    border-radius: 0 6px 6px 0;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+  }
+
+  .alert-box-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--ta-orange);
+    margin-bottom: 6px;
+  }
+
+  /* ── STEP CARDS ── */
+  .step-card {
+    border: 1px solid var(--ta-border);
+    border-left: 3px solid var(--ta-magenta);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 16px 14px 18px;
+    margin-bottom: 12px;
+    background: #ffffff;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+
+  .step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    background: var(--ta-magenta);
+    color: #fff;
+    border-radius: 50%;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .step-body h3 { font-size: 14px; font-weight: 700; color: var(--ta-dark); margin-bottom: 4px; }
+  .step-body p { font-size: 13px; color: var(--ta-text); line-height: 1.5; }
+
+  /* ── ALERT DÉLAI ── */
+  .alert-delai {
+    background: var(--ta-orange-light);
+    border-left: 3px solid var(--ta-orange);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin-bottom: 28px;
+  }
+
+  .alert-delai .alert-box-label { margin-bottom: 4px; }
+  .alert-delai strong { font-size: 15px; color: var(--ta-dark); }
+
+  /* ── INTERVENTION BLOCK ── */
+  .intervention-block {
+    border: 2px solid var(--ta-magenta);
+    border-radius: 10px;
+    background: linear-gradient(180deg, #FAFAFA 0%, #ffffff 100%);
+    padding: 20px;
+    margin-bottom: 28px;
+  }
+
+  .intervention-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 14px;
+  }
+
+  .intervention-col h3 {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--ta-magenta);
+    margin-bottom: 10px;
+  }
+
+  .doc-check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--ta-text);
+    margin-bottom: 7px;
+  }
+
+  .doc-check-box {
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+    border: 2px solid var(--ta-magenta);
+    border-radius: 3px;
+    display: inline-block;
+  }
+
+  .send-instructions {
+    background: var(--ta-grey-light);
+    border-radius: 6px;
+    padding: 12px 14px;
+    font-size: 13px;
+    color: var(--ta-text);
+    line-height: 1.6;
+  }
+
+  /* ── DISCLAIMER ── */
+  .disclaimer {
+    font-size: 11.5px;
+    font-style: italic;
+    color: var(--ta-grey);
+    text-align: center;
+    padding: 16px 28px;
+    border-top: 1px solid var(--ta-border);
+  }
+
+  /* ── CONTACT URGENT ── */
+  .urgent-contact {
+    background: var(--ta-dark);
+    border-radius: 10px;
+    padding: 18px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 28px 28px;
+  }
+
+  .urgent-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--ta-orange);
+    margin-bottom: 2px;
+  }
+
+  .urgent-sub { font-size: 12px; color: rgba(255,255,255,0.6); }
+  .urgent-number { font-size: 22px; font-weight: 700; color: #ffffff; letter-spacing: -0.5px; }
+
+  /* ── SIGNATURE ── */
+  .signature {
+    padding: 18px 28px;
+    border-top: 1px solid var(--ta-border);
+  }
+
+  .signature p { font-size: 13.5px; color: var(--ta-text); margin-bottom: 4px; }
+  .signature .role { color: var(--ta-magenta); font-weight: 700; font-size: 13px; }
+  .signature .deonto { font-style: italic; font-size: 11.5px; color: var(--ta-grey); margin-top: 8px; }
+
+  /* ── FOOTER INFO GRID ── */
+  .footer-info {
+    padding: 20px 28px;
+    background: var(--ta-grey-light);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .info-card { background: var(--ta-grey-light); border-radius: 6px; padding: 14px; }
+  .info-card.legales { border-top: 3px solid var(--ta-magenta); }
+  .info-card.tech { border-top: 3px solid var(--ta-grey); }
+
+  .info-card h4 {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--ta-grey);
+    margin-bottom: 10px;
+  }
+
+  .info-card ul { list-style: none; padding: 0; }
+
+  .info-card ul li {
+    font-size: 12px;
+    color: var(--ta-text);
+    padding: 3px 0 3px 14px;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .info-card.legales ul li::before { content: '•'; position: absolute; left: 0; color: var(--ta-magenta); font-weight: 700; }
+  .info-card.tech ul li::before { content: '•'; position: absolute; left: 0; color: var(--ta-grey); }
+
+  /* ── FOOTER INSTITUTIONNEL ── */
+  .footer-inst {
+    background: var(--ta-dark);
+    padding: 16px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-inst .org { font-size: 13px; font-weight: 700; color: #ffffff; margin-bottom: 2px; }
+  .footer-inst .addr { font-size: 11px; color: rgba(255,255,255,0.5); }
+  .footer-inst a { font-size: 11px; color: var(--ta-orange); text-decoration: none; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .content { padding: 18px 16px 0; }
+    .header { padding: 16px; }
+    .dossier-bar { flex-direction: column; gap: 8px; padding: 10px 16px; }
+    .intervention-grid { grid-template-columns: 1fr; }
+    .footer-info { grid-template-columns: 1fr; padding: 16px; }
+    .urgent-contact { flex-direction: column; align-items: center; text-align: center; gap: 10px; margin: 0 16px 22px; }
+    .signature { padding: 16px; }
+    .footer-inst { flex-direction: column; gap: 8px; text-align: center; padding: 14px 16px; }
+    .disclaimer { padding: 12px 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- 1. HEADER -->
+  <div class="header">
+    <div class="logo-wrap">
+      <div class="logo-icon">
+        <div class="logo-top"></div>
+        <div class="logo-bottom"></div>
+      </div>
+      <div>
+        <div class="logo-name">testachats <span>/ testaankoop</span></div>
+      </div>
+    </div>
+    <div class="header-service">Service Conseil Juridique</div>
+  </div>
+
+  <!-- 2. BARRE DOSSIER -->
+  <div class="dossier-bar">
+    <div class="dossier-field">Dossier<strong>{{Case.CaseNumber}}</strong></div>
+    <div class="dossier-field">Référence<strong>{{Case.Thread_Token}}</strong></div>
+    <div class="dossier-field">Date<strong>{{Case.Current_Date_for_Email__c}}</strong></div>
+  </div>
+
+  <!-- 3. SALUTATION + INTRO -->
+  <div class="content">
+    <h1 class="greeting">Bonjour,</h1>
+    <p class="intro">Vous n'avez pas reçu votre commande dans les délais prévus. Voici vos droits et les étapes concrètes pour agir efficacement.</p>
+
+    <!-- 4. BANDEAU N1 -->
+    <div class="bandeau-n1">
+      <div class="bandeau-label">✓ Votre situation en bref</div>
+      <div class="bandeau-text">
+        Si votre commande n'a pas été livrée dans le délai prévu — ou dans les <span class="kw">30 jours</span> légaux — vous pouvez exiger une <span class="kw">nouvelle date de livraison</span>. Si le vendeur ne s'exécute toujours pas, vous avez le droit d'<span class="kw">annuler le contrat</span> et d'obtenir le <span class="kw">remboursement intégral</span> de toutes les sommes versées.
+      </div>
+    </div>
+
+    <!-- SECTION 1 : VOS DROITS -->
+    <div class="section">
+      <h2 class="section-title"><span class="section-num">1</span> Vos droits en tant que consommateur</h2>
+      <table class="rights-table">
+        <thead>
+          <tr>
+            <th>Votre droit</th>
+            <th>Ce que cela signifie concrètement</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="accent">Exiger la livraison</td>
+            <td>Vous pouvez demander au vendeur de livrer votre commande dans un nouveau délai raisonnable que vous fixez vous-même.</td>
+          </tr>
+          <tr>
+            <td class="accent">Délai légal de 30 jours</td>
+            <td>Si aucune date n'était prévue dans votre contrat, le vendeur avait au maximum 30 jours après la commande pour livrer.</td>
+          </tr>
+          <tr>
+            <td class="accent">Annuler le contrat</td>
+            <td>Si le vendeur ne livre pas malgré votre demande, vous pouvez mettre fin au contrat et récupérer toutes les sommes payées.</td>
+          </tr>
+          <tr>
+            <td class="accent">Annulation immédiate</td>
+            <td>Si la date de livraison était expressément indiquée comme essentielle dans votre contrat, vous pouvez annuler sans devoir accorder de délai supplémentaire.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ENCARTS -->
+    <div class="info-box">
+      <div class="info-box-label">💡 Bon à savoir</div>
+      <p>Un email suffit pour contacter le vendeur, mais un <strong>envoi recommandé</strong> est fortement conseillé : il constitue une preuve solide que vous avez bien mis le vendeur en demeure d'agir.</p>
+    </div>
+
+    <div class="alert-box">
+      <div class="alert-box-label">⚠ Cas particulier — délai essentiel</div>
+      <p>Si votre contrat mentionne explicitement que la date de livraison est <strong>essentielle</strong> pour vous (ce qui reste rare en pratique), vous pouvez annuler la commande et demander le remboursement <strong>immédiatement</strong>, sans devoir fixer de nouveau délai.</p>
+    </div>
+
+    <!-- SECTION 2 : CE QUE VOUS DEVEZ FAIRE -->
+    <div class="section">
+      <h2 class="section-title"><span class="section-num">2</span> Ce que vous devez faire</h2>
+
+      <div class="step-card">
+        <span class="step-num">1</span>
+        <div class="step-body">
+          <h3>Contactez le vendeur par écrit</h3>
+          <p>Envoyez un email ou un courrier recommandé pour signaler le retard. Fixez au vendeur un nouveau délai de livraison précis et raisonnable (par exemple : 7 ou 14 jours à compter de votre envoi).</p>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <span class="step-num">2</span>
+        <div class="step-body">
+          <h3>Conservez toutes les preuves</h3>
+          <p>Gardez le bon de commande, vos échanges avec le vendeur, la preuve d'envoi de votre courrier ou email, et tout document lié au retard de livraison.</p>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <span class="step-num">3</span>
+        <div class="step-body">
+          <h3>Annulez la commande si nécessaire</h3>
+          <p>Si le vendeur ne livre toujours pas dans le délai que vous avez fixé, notifiez-lui par écrit que vous annulez le contrat et exigez le remboursement intégral sans retard.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ALERT DÉLAI -->
+    <div class="alert-delai">
+      <div class="alert-box-label">⚠ Remboursement en cas d'annulation</div>
+      <strong>Le vendeur est tenu de vous rembourser l'intégralité des sommes payées, sans retard excessif.</strong>
+      <p style="font-size:13px; margin-top:4px; color: var(--ta-text);">Si le remboursement tarde, revenez vers nous avec vos documents — nous interviendrons pour débloquer la situation.</p>
+    </div>
+
+    <!-- SECTION 3 : COMMENT TESTACHATS PEUT AIDER -->
+    <div class="section">
+      <h2 class="section-title"><span class="section-num">3</span> Comment Testachats peut vous aider</h2>
+      <div class="intervention-block">
+        <p style="font-size:13.5px; color: var(--ta-text);">Si le vendeur ne répond pas à votre demande ou refuse de livrer et de rembourser, nous pouvons intervenir pour tenter une solution amiable. Transmettez-nous les éléments suivants.</p>
+        <div class="intervention-grid">
+          <div class="intervention-col">
+            <h3>Documents à nous transmettre</h3>
+            <div class="doc-check"><span class="doc-check-box"></span> Bon de commande</div>
+            <div class="doc-check"><span class="doc-check-box"></span> Preuve de paiement</div>
+            <div class="doc-check"><span class="doc-check-box"></span> Votre mise en demeure écrite</div>
+            <div class="doc-check"><span class="doc-check-box"></span> Réponse éventuelle du vendeur</div>
+            <div class="doc-check"><span class="doc-check-box"></span> Tout autre échange utile</div>
+          </div>
+          <div class="intervention-col">
+            <h3>Comment nous les envoyer</h3>
+            <div class="send-instructions">
+              📎 De préférence en PDF, en répondant directement à cet email.<br><br>
+              Mentionnez votre <strong>numéro d'abonné</strong> et un <strong>numéro de téléphone</strong> où vous joindre.<br><br>
+              Indiquez la référence <strong>{{Case.Thread_Token}}</strong> dans votre réponse.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+
+  <!-- DISCLAIMER -->
+  <div class="disclaimer">
+    Les informations fournies dans cet email sont données à titre indicatif et ne constituent pas un avis juridique personnalisé. Elles sont basées sur les éléments communiqués et la législation en vigueur.
+  </div>
+
+  <!-- CONTACT URGENT -->
+  <div class="urgent-contact">
+    <div>
+      <div class="urgent-label">📞 Besoin urgent d'aide ?</div>
+      <div class="urgent-sub">Pour les situations urgentes, privilégiez le téléphone</div>
+    </div>
+    <div class="urgent-number">+32 2 542 32 00</div>
+  </div>
+
+  <!-- SIGNATURE -->
+  <div class="signature">
+    <p>À votre service,</p>
+    <p class="role">Service Conseil Juridique — Testachats / Testaankoop</p>
+    <p class="deonto">Pour des raisons déontologiques, nos avocats ne peuvent pas communiquer leur nom. Nous vous garantissons que votre dossier sera traité avec le meilleur soin.</p>
+  </div>
+
+  <!-- FOOTER GRILLE -->
+  <div class="footer-info">
+    <div class="info-card legales">
+      <h4>Bases légales</h4>
+      <ul>
+        <li>Article VI.43 du Code de droit économique belge</li>
+        <li>Règles relatives aux délais de livraison des biens de consommation</li>
+        <li>Directive européenne 2019/771 relative à la vente de biens</li>
+      </ul>
+    </div>
+    <div class="info-card tech">
+      <h4>Informations techniques</h4>
+      <ul>
+        <li>Répondez directement à cet email en mentionnant la référence <strong>{{Case.Thread_Token}}</strong></li>
+        <li>Votre dossier se rouvrira automatiquement à réception de votre réponse</li>
+        <li>Dossier n° {{Case.CaseNumber}}</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- FOOTER INSTITUTIONNEL -->
+  <div class="footer-inst">
+    <div>
+      <div class="org">Testachats / Testaankoop</div>
+      <div class="addr">Rue de Hollande 13, 1060 Bruxelles · <a href="https://www.testachats.be">www.testachats.be</a></div>
+    </div>
+  </div>
+
+</div><!-- /wrapper -->
+</body>
+</html>
